@@ -12,10 +12,10 @@
 DRIVERPATH = .
 
 # VIC RUN PATH
-SHAREDPATH = ../shared_all
+SHAREDPATH = ./dependency/shared_all
 
 # VIC RUN PATH
-VICPATH = ../../vic_run
+VICPATH = ./dependency/vic_run
 
 # Set SHELL = your shell here
 # SHELL = /bin/bash
