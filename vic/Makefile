@@ -99,7 +99,9 @@ full:
 
 clean::
 	rm -f core log
-	rm src/*.o
+	rm -f ${SHAREDPATH}/src/*.o
+	rm -f ${VICPATH}/src/*.o
+	rm -f src/*.o
 	rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 
 %.o: %.c
