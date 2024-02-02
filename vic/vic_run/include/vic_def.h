@@ -7,7 +7,8 @@
 #ifndef VIC_DEF_H
 #define VIC_DEF_H
 
-#define _BSD_SOURCE
+// #define _BSD_SOURCE
+#define _DEFAULT_SOURCE
 #define __USE_XOPEN
 #define _GNU_SOURCE
 
@@ -22,7 +23,7 @@
 #include <stddef.h>
 #include <unistd.h>
 #include <time.h>
-#include <pwd.h>
+// #include <pwd.h>
 #include <sys/time.h>
 #include <sys/types.h>
 

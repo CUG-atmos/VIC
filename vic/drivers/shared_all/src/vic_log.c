@@ -126,23 +126,23 @@ setup_logging(int    id,
 void
 print_trace(void)
 {
-    void  *array[50];
-    size_t size;
-    char **strings;
-    size_t i;
+    // void  *array[50];
+    // size_t size;
+    // char **strings;
+    // size_t i;
 
-    size = backtrace(array, 50);
-    strings = backtrace_symbols(array, size);
+    // size = backtrace(array, 50);
+    // strings = backtrace_symbols(array, size);
 
-    /* Note: we are ignoring the first and last stack frame
-       the first is this function, the last is the linker, neither are
-       particularly useful */
-    fprintf(LOG_DEST,
-            "---------------------------------------------------------------------------\n");
-    fprintf(LOG_DEST, "Traceback (most recent call last):\n");
-    for (i = size - 2; i > 0; i--) {
-        fprintf(LOG_DEST, "%s\n", strings[i]);
-    }
+    // /* Note: we are ignoring the first and last stack frame
+    //    the first is this function, the last is the linker, neither are
+    //    particularly useful */
+    // fprintf(LOG_DEST,
+    //         "---------------------------------------------------------------------------\n");
+    // fprintf(LOG_DEST, "Traceback (most recent call last):\n");
+    // for (i = size - 2; i > 0; i--) {
+    //     fprintf(LOG_DEST, "%s\n", strings[i]);
+    // }
 
-    free(strings);
+    // free(strings);
 }

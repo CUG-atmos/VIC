@@ -899,20 +899,22 @@ strpdmy(const char *s,
         const char *format,
         dmy_struct *dmy)
 {
-    struct tm t;
+    /**
+      struct tm t;
 
-    // Initialize some of the time struct
-    t.tm_mon = 1;
-    t.tm_mday = 1;
-    t.tm_hour = 0;
-    t.tm_min = 0;
-    t.tm_sec = 0;
+      // Initialize some of the time struct
+      t.tm_mon = 1;
+      t.tm_mday = 1;
+      t.tm_hour = 0;
+      t.tm_min = 0;
+      t.tm_sec = 0;
 
-    strptime(s, format, &t);
+      strptime(s, format, &t);
 
-    dmy->year = t.tm_year + 1900;  // tm_year is Year - 1900
-    dmy->month = t.tm_mon + 1;  // tm_month is [0-11]
-    dmy->day = t.tm_mday;
-    dmy->dayseconds =
-        (double) (t.tm_hour * SEC_PER_HOUR + t.tm_min * SEC_PER_MIN + t.tm_sec);
+      dmy->year = t.tm_year + 1900;  // tm_year is Year - 1900
+      dmy->month = t.tm_mon + 1;  // tm_month is [0-11]
+      dmy->day = t.tm_mday;
+      dmy->dayseconds =
+          (double) (t.tm_hour * SEC_PER_HOUR + t.tm_min * SEC_PER_MIN + t.tm_sec);
+    */
 }

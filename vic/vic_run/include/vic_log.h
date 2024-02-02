@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 #include <errno.h>
-#include <execinfo.h>
+// #include <execinfo.h>
 #include <string.h>
 
 // Set the log level

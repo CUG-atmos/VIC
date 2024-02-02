@@ -20,8 +20,8 @@ write_vic_timing_table(timer_struct *timers)
     char                       user[MAXSTRING];
     time_t                     curr_date_time;
     struct tm                 *timeinfo;
-    uid_t                      uid;
-    struct passwd             *pw;
+    // uid_t                      uid;
+    // struct passwd             *pw;
     double                     ndays;
     double                     nyears;
 
@@ -33,20 +33,20 @@ write_vic_timing_table(timer_struct *timers)
     timeinfo = localtime(&curr_date_time);
 
     // hostname
-    if (gethostname(machine, MAXSTRING) != 0) {
+    // if (gethostname(machine, MAXSTRING) != 0) {
         strcpy(machine, "unknown");
-    }
+    // }
 
     // username
-    uid = geteuid();
-    pw = getpwuid(uid);
+    // uid = geteuid();
+    // pw = getpwuid(uid);
 
-    if (pw) {
-        strcpy(user, pw->pw_name);
-    }
-    else {
-        strcpy(user, "unknown");
-    }
+    // if (pw) {
+    //     strcpy(user, pw->pw_name);
+    // }
+    // else {
+    //     strcpy(user, "unknown");
+    // }
 
     // calculate run length
     ndays = global_param.dt * global_param.nrecs / SEC_PER_DAY;

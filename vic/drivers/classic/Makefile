@@ -27,7 +27,7 @@ VICPATH = ../../vic_run
 # endif
 CC=gcc
 
-# GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
+GIT_VERSION := $(git describe --abbrev=4 --dirty --always --tags)
 # HOSTNAME := $(shell uname -n)
 
 # Set the log level
@@ -48,9 +48,10 @@ INCLUDES = -I ${DRIVERPATH}/include -I $(SHAREDPATH)/include -I ${VICPATH}/inclu
 # LIBRARY = -lm
 
 # Uncomment to include debugging information
-CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 \
+# gcc10, -fcommon: https://stackoverflow.com/questions/69908418/multiple-definition-of-first-defined-here-on-gcc-10-2-1-but-not-gcc-8-3-0
+CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 -fcommon \
 					 -DLOG_LVL=$(LOG_LVL) \
-					#  -DGIT_VERSION=\"$(GIT_VERSION)\" \
+					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
 					 -DHOSTNAME=\"$(HOSTNAME)\"
 LIBRARY = -lm
@@ -84,27 +85,32 @@ SRCS = \
 OBJS = $(SRCS:%.o=%.c)
 
 all:
-	make depend
-	make model
-
-default:
-	make depend
-	make model
+	make exe
+	make dll
+# default:
+# 	make depend
+# 	make model
 
 full:
 	make clean
 	make depend
 	make tags
-	make model
+	# make model
 
 clean::
 	rm -f core log
 	rm src/*.o
 	rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 
-model: $(OBJS)
-	$(CC) -o vic_classic.dll $(OBJS) $(CFLAGS) -fPIC -shared $(LIBRARY)
-# $(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
+
+exe: $(OBJS)
+	$(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+
+dll: $(OBJS)
+	$(CC) -o ${COMPEXE}.dll $(OBJS) $(CFLAGS) -shared -fPIC $(LIBRARY)
+
 
 # -------------------------------------------------------------
 # tags
