@@ -18,15 +18,17 @@ SHAREDPATH = ../shared_all
 VICPATH = ../../vic_run
 
 # Set SHELL = your shell here
-SHELL = /bin/bash
+# SHELL = /bin/bash
+# SHELL = powershell
 
 # Set CC = your compiler here
-ifndef CC
+# ifndef CC
+# CC=gcc
+# endif
 CC=gcc
-endif
 
-GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
-HOSTNAME := $(shell uname -n)
+# GIT_VERSION := $(shell git describe --abbrev=4 --dirty --always --tags)
+# HOSTNAME := $(shell uname -n)
 
 # Set the log level
 # To turn off warning statements, set LOG_LVL >= 30
@@ -48,7 +50,7 @@ INCLUDES = -I ${DRIVERPATH}/include -I $(SHAREDPATH)/include -I ${VICPATH}/inclu
 # Uncomment to include debugging information
 CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 \
 					 -DLOG_LVL=$(LOG_LVL) \
-					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
+					#  -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
 					 -DHOSTNAME=\"$(HOSTNAME)\"
 LIBRARY = -lm
@@ -96,11 +98,13 @@ full:
 	make model
 
 clean::
-	\rm -f core log
-	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
+	rm -f core log
+	rm src/*.o
+	rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 
 model: $(OBJS)
-	$(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
+	$(CC) -o vic_classic.dll $(OBJS) $(CFLAGS) -fPIC -shared $(LIBRARY)
+# $(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
 
 # -------------------------------------------------------------
 # tags
@@ -110,7 +114,7 @@ tags:	TAGS
 TAGS:	$(SRCS) $(HDRS)
 	etags $(SRCS) $(HDRS)
 clean::
-	\rm -f TAGS
+	rm -f TAGS
 
 
 # -------------------------------------------------------------
@@ -121,4 +125,4 @@ depend: .depend
 	$(CC) $(CFLAGS) -M $(SRCS) > $@
 
 clean::
-	\rm -f .depend
+	rm -f .depend
