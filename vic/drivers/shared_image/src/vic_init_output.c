@@ -590,12 +590,12 @@ set_global_nc_attributes(int ncid,
     uid = geteuid();
     pw = getpwuid(uid);
 
-    if (pw) {
-        strcpy(userstr, pw->pw_name);
-    }
-    else {
+    // if (pw) {
+    //     strcpy(userstr, pw->pw_name);
+    // }
+    // else {
         strcpy(userstr, "unknown");
-    }
+    // }
 
     // hostname
     if (gethostname(hoststr, MAXSTRING) != 0) {

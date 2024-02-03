@@ -64,11 +64,14 @@ INCLUDES = -I ${DRIVERPATH}/include \
 		   -I ${VICPATH}/include \
 		   -I ${SHAREDPATH}/include \
 		   -I ${SHAREDIMAGEPATH}/include \
-		   -I ${EXTPATH}/${ROUT}/include
+		   -I ${EXTPATH}/${ROUT}/include \
+			 -I /usr/lib/x86_64-linux-gnu/openmpi/include \
+			 -L /usr/lib/x86_64-linux-gnu/openmpi/lib
+#  -I /usr/include/x86_64-linux-gnu/mpich \
 
 # Uncomment to include debugging information
-CFLAGS  =  ${INCLUDES} ${NC_CFLAGS} -ggdb -O0 -Wall -Wextra -std=c99 \
-					 -fopenmp \
+CFLAGS  =  ${INCLUDES} ${NC_CFLAGS} -ggdb -O3 -Wall -Wextra -std=c99 \
+					 -fopenmp -fcommon \
 					 -DLOG_LVL=$(LOG_LVL) \
 					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
@@ -102,7 +105,7 @@ SRCS = \
 	$(wildcard ${SHAREDIMAGEPATH}/src/*.c) \
 	$(wildcard ${EXTPATH}/${ROUT}/src/*.c)
 
-OBJS = $(SRCS:%.o=%.c)
+OBJS = $(SRCS:%.c=%.o)
 
 all:
 	make depend
@@ -119,6 +122,11 @@ full:
 	make model
 
 clean::
+	rm -f ${SHAREDPATH}/src/*.o
+	rm -f ${SHAREDIMAGEPATH}/src/*.o
+	rm -f ${VICPATH}/src/*.o
+	rm -f ${EXTPATH}/${ROUT}/src/*.o
+	rm -f src/*.o
 	\rm -f core log
 	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
 

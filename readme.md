@@ -1,5 +1,7 @@
 # Variable Infiltration Capacity (VIC) Model
 
+[![CI](https://github.com/CUG-hydro/VIC5.c/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/CUG-hydro/VIC5.c/actions/workflows/c-cpp.yml)
+
 | VIC Links & Badges              |                                                                             |
 |------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | VIC Documentation      | [![Documentation Status](https://readthedocs.org/projects/vic/badge/?version=latest)](http://vic.readthedocs.org/en/latest/)                                                                             |

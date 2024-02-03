@@ -45,12 +45,12 @@ write_vic_timing_table(timer_struct *timers,
     uid = geteuid();
     pw = getpwuid(uid);
 
-    if (pw) {
-        strcpy(user, pw->pw_name);
-    }
-    else {
+    // if (pw) {
+    //     strcpy(user, pw->pw_name);
+    // }
+    // else {
         strcpy(user, "unknown");
-    }
+    // }
 
     // mpi/openmp
     nthreads = omp_get_max_threads();

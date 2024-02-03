@@ -49,7 +49,7 @@ INCLUDES = -I ${DRIVERPATH}/include -I $(SHAREDPATH)/include -I ${VICPATH}/inclu
 
 # Uncomment to include debugging information
 # gcc10, -fcommon: https://stackoverflow.com/questions/69908418/multiple-definition-of-first-defined-here-on-gcc-10-2-1-but-not-gcc-8-3-0
-CFLAGS  =  ${INCLUDES} -g -Wall -Wextra -std=c99 -fcommon \
+CFLAGS  =  ${INCLUDES} -g -O3 -Wall -Wextra -std=c99 -fcommon \
 					 -DLOG_LVL=$(LOG_LVL) \
 					 -DGIT_VERSION=\"$(GIT_VERSION)\" \
 					 -DUSERNAME=\"$(USER)\" \
@@ -64,14 +64,15 @@ LIBRARY = -lm
 #CFLAGS  = ${INCLUDES} -g -Wall -Wno-unused -DLOG_LVL=$(LOG_LVL)
 #LIBRARY = -lm -lefence -L/usr/local/lib
 
-COMPEXE = vic_classic
-EXT = .exe
+ifeq ($(target),)
+	target := libvic5_classic.dll
+endif
+
+exe    = vic_classic.exe
 
 # -----------------------------------------------------------------------
 # MOST USERS DO NOT NEED TO MODIFY BELOW THIS LINE
 # -----------------------------------------------------------------------
-
-
 HDRS = \
 	$(wildcard ${VICPATH}/include/*.h) \
 	$(wildcard ${DRIVERPATH}/include/*.h) \
@@ -82,53 +83,31 @@ SRCS = \
 	$(wildcard ${DRIVERPATH}/src/*.c) \
 	$(wildcard ${SHAREDPATH}/src/*.c)
 
-OBJS = $(SRCS:%.o=%.c)
+OBJS = $(SRCS:%.c=%.o)
 
-all:
+default: 
 	make exe
 	make dll
-# default:
-# 	make depend
-# 	make model
 
-full:
-	make clean
-	make depend
-	make tags
-	# make model
+exe: $(exe)
+dll: $(target)
+
+$(target): $(OBJS)
+	$(CC) -o ${target} $(OBJS) $(CFLAGS) -shared $(LIBRARY)
+
+$(exe): $(OBJS)
+	$(CC) -o $(exe) $(OBJS) $(CFLAGS) $(LIBRARY)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -fPIC $< -o $@
+
+install:
+	install -m 755 $(exe) $bindir
+	install $(target) $libdir
 
 clean::
 	rm -f core log
-	rm src/*.o
+	rm -f ${SHAREDPATH}/src/*.o
+	rm -f ${VICPATH}/src/*.o
+	rm -f src/*.o
 	rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
-
-%.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
-
-exe: $(OBJS)
-	$(CC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
-
-dll: $(OBJS)
-	$(CC) -o ${COMPEXE}.dll $(OBJS) $(CFLAGS) -shared -fPIC $(LIBRARY)
-
-
-# -------------------------------------------------------------
-# tags
-# so we can find our way around
-# -------------------------------------------------------------
-tags:	TAGS
-TAGS:	$(SRCS) $(HDRS)
-	etags $(SRCS) $(HDRS)
-clean::
-	rm -f TAGS
-
-
-# -------------------------------------------------------------
-# depend
-# -------------------------------------------------------------
-depend: .depend
-.depend: $(SRCS) $(HDRS)
-	$(CC) $(CFLAGS) -M $(SRCS) > $@
-
-clean::
-	rm -f .depend
