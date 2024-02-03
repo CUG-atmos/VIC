@@ -8,17 +8,34 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     #- name: configure
     #  run: ./configure
-    - name: make
-      run: 
-        gcc --version; cd vic/drivers/classic && make
-    #- name: make check
-    #  run: make check
-    #- name: make distcheck
-    #  run: make distcheck
+    - name: Set up dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install openmpi-bin openmpi-common libopenmpi-dev libnetcdf-dev
+        echo "---- location of OpenMPI C compiler ----"
+        which mpicc
+        mpicc -v
+        gcc -v
+
+    - name: Build classic
+      run: |
+        cd vic/drivers/classic && make -j4
+        ls -l
+        ./vic_classic.exe -v
+    
+    - name: Build image
+      run: |
+        cd vic/drivers/image && make -j4
+        ls -l
+        ./vic_image.exe -v
+
+    - name: Test
+      run: |
+        cd vic/drivers/classic && ./vic_classic.exe -v
+        cd ../image && ./vic_image.exe -v
