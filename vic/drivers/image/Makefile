@@ -84,8 +84,12 @@ endif
 
 LIBRARY = -lm ${NC_LIBS}
 
-COMPEXE = vic_image
-EXT = .exe
+
+dlext ?= so
+prefix ?= /usr/local
+
+target = libvic5_image.${dlext}
+exe    = vic_image.exe
 
 # -----------------------------------------------------------------------
 # MOST USERS DO NOT NEED TO MODIFY BELOW THIS LINE
@@ -107,19 +111,25 @@ SRCS = \
 
 OBJS = $(SRCS:%.c=%.o)
 
+
 all:
-	make depend
 	make model
+	make dll
 
-default:
-	make depend
-	make model
+model: $(OBJS)
+	$(MPICC) -o ${exe} $(OBJS) $(CFLAGS) $(LIBRARY)
 
-full:
-	make clean
-	make depend
-	make tags
-	make model
+
+dll: $(OBJS)
+	$(MPICC) -o ${target} $(OBJS) $(CFLAGS) -shared $(LIBRARY)
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -fPIC $< -o $@
+
+install:
+	install -Dvm 755 ${exe} ${prefix}/bin
+	install -Dv ${target} ${prefix}/lib
+
 
 clean::
 	rm -f ${SHAREDPATH}/src/*.o
@@ -127,29 +137,6 @@ clean::
 	rm -f ${VICPATH}/src/*.o
 	rm -f ${EXTPATH}/${ROUT}/src/*.o
 	rm -f src/*.o
+	rm -f *.so *.dll *.exe
 	\rm -f core log
-	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
-
-model: $(OBJS)
-	$(MPICC) -o ${COMPEXE}${EXT} $(OBJS) $(CFLAGS) $(LIBRARY)
-
-# -------------------------------------------------------------
-# tags
-# so we can find our way around
-# -------------------------------------------------------------
-tags:	TAGS
-TAGS:	$(SRCS) $(HDRS)
-	etags $(SRCS) $(HDRS)
-clean::
-	\rm -f TAGS
-
-
-# -------------------------------------------------------------
-# depend
-# -------------------------------------------------------------
-depend: .depend
-.depend: $(SRCS) $(HDRS)
-	$(MPICC) $(CFLAGS) -M $(SRCS) > $@
-
-clean::
-	\rm -f .depend
+	\rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM *.dll *.so

@@ -28,14 +28,18 @@ jobs:
         cd vic/drivers/classic && make -j4
         ls -l
         ./vic_classic.exe -v
+        sudo make install
+        vic_classic.exe -v
     
     - name: Build image
       run: |
         cd vic/drivers/image && make -j4
         ls -l
         ./vic_image.exe -v
+        sudo make install
+        vic_image.exe -v
 
     - name: Test
       run: |
-        cd vic/drivers/classic && ./vic_classic.exe -v
-        cd ../image && ./vic_image.exe -v
+        cd vic/drivers/classic && ls -l && ./vic_classic.exe -v
+        cd ../image && ls -l && ./vic_image.exe -v

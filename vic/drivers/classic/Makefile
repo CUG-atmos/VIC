@@ -22,10 +22,9 @@ VICPATH = ../../vic_run
 # SHELL = powershell
 
 # Set CC = your compiler here
-# ifndef CC
-# CC=gcc
-# endif
+ifndef CC
 CC=gcc
+endif
 
 GIT_VERSION := $(git describe --abbrev=4 --dirty --always --tags)
 # HOSTNAME := $(shell uname -n)
@@ -64,10 +63,10 @@ LIBRARY = -lm
 #CFLAGS  = ${INCLUDES} -g -Wall -Wno-unused -DLOG_LVL=$(LOG_LVL)
 #LIBRARY = -lm -lefence -L/usr/local/lib
 
-ifeq ($(target),)
-	target := libvic5_classic.dll
-endif
+dlext ?= so
+prefix ?= /usr/local
 
+target = libvic5_classic.${dlext}
 exe    = vic_classic.exe
 
 # -----------------------------------------------------------------------
@@ -85,29 +84,29 @@ SRCS = \
 
 OBJS = $(SRCS:%.c=%.o)
 
-default: 
-	make exe
+
+all: 
+	make model
 	make dll
 
-exe: $(exe)
-dll: $(target)
-
-$(target): $(OBJS)
-	$(CC) -o ${target} $(OBJS) $(CFLAGS) -shared $(LIBRARY)
-
-$(exe): $(OBJS)
+model: $(OBJS)
 	$(CC) -o $(exe) $(OBJS) $(CFLAGS) $(LIBRARY)
+
+dll: $(OBJS)
+	$(CC) -o ${target} $(OBJS) $(CFLAGS) -shared $(LIBRARY)
 
 %.o: %.c
 	$(CC) -c $(CFLAGS) -fPIC $< -o $@
 
 install:
-	install -m 755 $(exe) $bindir
-	install $(target) $libdir
+	install -Dvm 755 ${exe} ${prefix}/bin
+	install -Dv ${target} ${prefix}/lib
+
 
 clean::
 	rm -f core log
 	rm -f ${SHAREDPATH}/src/*.o
 	rm -f ${VICPATH}/src/*.o
 	rm -f src/*.o
+	rm -f *.so *.dll *.exe
 	rm -rf ${COMPEXE}${EXT} ${COMPEXE}${EXT}.dSYM
