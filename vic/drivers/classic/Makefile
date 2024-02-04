@@ -64,10 +64,13 @@ LIBRARY = -lm
 #LIBRARY = -lm -lefence -L/usr/local/lib
 
 dlext ?= so
-prefix ?= /usr/local
+exeext ?= .exe
+# prefix ?= /usr/local
+bindir ?= /usr/local/bin
+libdir ?= /usr/local/lib
 
 target = libvic5_classic.${dlext}
-exe    = vic_classic.exe
+exe    = vic_classic${exeext}
 
 # -----------------------------------------------------------------------
 # MOST USERS DO NOT NEED TO MODIFY BELOW THIS LINE
@@ -99,9 +102,12 @@ dll: $(OBJS)
 	$(CC) -c $(CFLAGS) -fPIC $< -o $@
 
 install:
-	install -Dvm 755 ${exe} ${prefix}/bin
-	install -Dv ${target} ${prefix}/lib
-
+	@echo "Installing to ${bindir}, ${libdir}"
+	@echo "================================="
+	install -Dvm 755 $(exe) $(bindir)
+	install -Dv $(target) $(libdir)
+	ls -l $(bindir)/$(exe) 
+	ls -l $(libdir)/$(target)
 
 clean::
 	rm -f core log

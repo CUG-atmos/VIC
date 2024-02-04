@@ -86,10 +86,13 @@ LIBRARY = -lm ${NC_LIBS}
 
 
 dlext ?= so
-prefix ?= /usr/local
+exeext ?= .exe
+# prefix ?= /usr/local
+bindir ?= /usr/local/bin
+libdir ?= /usr/local/lib
 
 target = libvic5_image.${dlext}
-exe    = vic_image.exe
+exe    = vic_image${exeext}
 
 # -----------------------------------------------------------------------
 # MOST USERS DO NOT NEED TO MODIFY BELOW THIS LINE
@@ -127,9 +130,12 @@ dll: $(OBJS)
 	$(CC) -c $(CFLAGS) -fPIC $< -o $@
 
 install:
-	install -Dvm 755 ${exe} ${prefix}/bin
-	install -Dv ${target} ${prefix}/lib
-
+	@echo "Installing to ${bindir}, ${libdir}"
+	@echo "================================="
+	install -Dvm 755 $(exe) $(bindir)
+	install -Dv $(target) $(libdir)
+	ls -l $(bindir)/$(exe) 
+	ls -l $(libdir)/$(target)
 
 clean::
 	rm -f ${SHAREDPATH}/src/*.o
