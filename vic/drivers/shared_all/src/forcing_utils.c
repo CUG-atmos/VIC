@@ -113,7 +113,7 @@ count_force_vars(FILE *gp)
     char          optstr[MAXSTRING];
 
     // Figure out where we are in the input file
-    fflush(gp);
+    // fflush(gp); // this line not work in windows
     start_position = ftell(gp);
 
     // read the first line

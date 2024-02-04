@@ -9,13 +9,13 @@
 # -----------------------------------------------------------------------
 
 # VIC DRIVER PATH (include and src are subdirs of this)
-DRIVERPATH = .
+DRIVERPATH = drivers/classic
 
 # VIC RUN PATH
-SHAREDPATH = ../shared_all
+SHAREDPATH = drivers/shared_all
 
 # VIC RUN PATH
-VICPATH = ../../vic_run
+VICPATH = vic_run
 
 # Set SHELL = your shell here
 # SHELL = /bin/bash

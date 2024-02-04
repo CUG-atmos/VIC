@@ -25,6 +25,28 @@
             // "preLaunchTask": "make build active file",
             "miDebuggerPath": "gdb"
             // "miDebuggerPath": "c:/Rtools/mingw_64/bin/gdb.exe"
+        }, 
+        {
+            "name": "windows debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/vic/drivers/classic/vic_classic.exe",
+            "args": ["-g", "vic/drivers/classic/data/Stehekin/global_param.STEHE.txt"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/vic/drivers/classic", //"${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            // "preLaunchTask": "make build active file",
+            "miDebuggerPath": "c:/Users/hydro/scoop/shims/gdb.exe"
+            // "miDebuggerPath": "c:/Rtools/mingw_64/bin/gdb.exe"
         }
     ]
 }
